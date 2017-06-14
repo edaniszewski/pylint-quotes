@@ -1,6 +1,9 @@
 """Setup for the pylint-quotes package.
 """
-from setuptools import setup
+
+from setuptools import setup, find_packages
+
+from pylint_quotes import __version__
 
 
 setup(
@@ -8,16 +11,14 @@ setup(
     description='Quote consistency checker for Pylint',
     long_description=open('README.md').read(),
     license='MIT',
-    version='0.1.0',
+    version=__version__,
     author='Erick Daniszewski',
     author_email='edaniszewski@gmail.com',
     url='https://github.com/edaniszewski/pylint-quotes',
     install_requires=[
         'pylint',
     ],
-    packages=[
-        '',
-    ],
+    packages=find_packages(),
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',

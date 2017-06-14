@@ -1,11 +1,13 @@
 """Pylint plugin for checking quote type on strings.
 """
+
 from __future__ import absolute_import
 
 import tokenize
 
 from pylint.interfaces import ITokenChecker, IAstroidChecker
 from pylint.checkers import BaseTokenChecker
+
 
 CONFIG_OPTS = ('single', 'double')
 
@@ -99,6 +101,20 @@ class StringQuoteChecker(BaseTokenChecker):
         """
         self._process_for_docstring(node, 'module')
 
+    # pylint: disable=unused-argument
+    def leave_module(self, node):
+        """Leave module and check remaining triple quotes.
+
+        Args:
+            node: the module node we are leaving.
+        """
+        for triple_quote in self._tokenized_triple_quotes.values():
+            self._check_triple_quotes(triple_quote)
+
+        # after we are done checking these, clear out the triple-quote
+        # tracking collection so nothing is left over for the next module.
+        self._tokenized_triple_quotes = {}
+
     def visit_classdef(self, node):
         """Visit class and check for docstring quote consistency.
 
@@ -145,16 +161,6 @@ class StringQuoteChecker(BaseTokenChecker):
                 quote_record = self._tokenized_triple_quotes[doc_row]
                 self._check_docstring_quotes(quote_record)
                 del self._tokenized_triple_quotes[doc_row]
-
-    # pylint: disable=unused-argument
-    def leave_module(self, node):
-        """Leave module and check remaining triple quotes.
-
-        Args:
-            node: the module node we are leaving.
-        """
-        for triple_quote in self._tokenized_triple_quotes.values():
-            self._check_triple_quotes(triple_quote)
 
     def process_tokens(self, tokens):
         """Process the token stream.
@@ -254,12 +260,3 @@ class StringQuoteChecker(BaseTokenChecker):
             line=row,
             args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote))
         )
-
-
-def register(linter):
-    """Required method to auto register this checker.
-
-    Args:
-        linter: Main interface object for Pylint plugins.
-    """
-    linter.register_checker(StringQuoteChecker(linter))

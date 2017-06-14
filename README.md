@@ -70,7 +70,7 @@ pip install pylint-quotes
 ## Usage
 To use pylint-quotes, it must loaded in as a plugin when running pylint
 ```
-pylint --load-plugins pylint-quotes <file>
+pylint --load-plugins pylint_quotes <module-or-package>
 ```
 
 ## Checks
