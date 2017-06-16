@@ -157,10 +157,28 @@ class StringQuoteChecker(BaseTokenChecker):
                 # the node has a docstring so we check the tokenized triple
                 # quotes to find a matching docstring token that follows the
                 # function/class definition.
-                doc_row = node.blockstart_tolineno + 1
-                quote_record = self._tokenized_triple_quotes[doc_row]
-                self._check_docstring_quotes(quote_record)
-                del self._tokenized_triple_quotes[doc_row]
+                doc_row = self._find_docstring_line(node.fromlineno, node.tolineno)
+                quote_record = self._tokenized_triple_quotes.get(doc_row)
+                if quote_record:
+                    self._check_docstring_quotes(quote_record)
+                    del self._tokenized_triple_quotes[doc_row]
+
+    def _find_docstring_line(self, start, end):
+        """Find the row where a docstring starts in a function or class.
+
+        This will search for the first match of a triple quote token in
+        row sequence from the start of the class or function.
+
+        Args:
+            start: the row where the class / function starts.
+            end: the row where the class / function ends.
+
+        Returns:
+            int: the row number where the docstring is found.
+        """
+        for i in range(start, end + 1):
+            if i in self._tokenized_triple_quotes:
+                return i
 
     def process_tokens(self, tokens):
         """Process the token stream.
