@@ -107,7 +107,7 @@ between
    ```
 
 ## Configuration
-The sting quote type can be configured as either 'single' or 'double' in the configuration
+The string quote type can be configured as either 'single' or 'double' in the configuration
 file. For example, to check for single quote string literals, double quote triple quoted string,
 and double quoted docstrings,
 ```ini
@@ -122,3 +122,8 @@ string-quote=single
 triple-quote=single
 docstring-quote=double
 ```
+
+Additionally the `string-quote` can be configured to avoid escaping: by default
+it enforces one type but if using the other type would avoid some escaping then
+it enforces the other one. To use those smart types the config is
+'single-avoid-escape', and 'double-avoid-escape'.

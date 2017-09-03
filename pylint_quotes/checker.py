@@ -10,10 +10,12 @@ from pylint.checkers import BaseTokenChecker
 
 
 CONFIG_OPTS = ('single', 'double')
+SMART_CONFIG_OPTS = tuple('%s-avoid-escape' % c for c in CONFIG_OPTS)
 
 QUOTES = ('\'', '"')
 
 SINGLE_QUOTE_OPTS = dict(zip(CONFIG_OPTS, QUOTES))
+SMART_QUOTE_OPTS = dict(zip(CONFIG_OPTS + SMART_CONFIG_OPTS, QUOTES + QUOTES))
 TRIPLE_QUOTE_OPTS = dict(zip(CONFIG_OPTS, [q * 3 for q in QUOTES]))
 
 
@@ -24,6 +26,10 @@ class StringQuoteChecker(BaseTokenChecker):
     triple quoted strings, and docstrings. Each of those three can be
     configured individually to use either single quotes (') or double
     quotes (").
+
+    Additionally string literals can enforce avoiding escaping chars, e.g.
+    enforcing single quotes (') most of the time, except if the string itself
+    contains a single quote, then enforce double quotes (").
     """
 
     __implements__ = (ITokenChecker, IAstroidChecker, )
@@ -56,9 +62,9 @@ class StringQuoteChecker(BaseTokenChecker):
             'string-quote',
             dict(
                 type='choice',
-                metavar='<{0} or {1}>'.format(*CONFIG_OPTS),
+                metavar='<{0}, {1}, {2} or {3}>'.format(*CONFIG_OPTS + SMART_CONFIG_OPTS),
                 default=CONFIG_OPTS[0],
-                choices=CONFIG_OPTS,
+                choices=CONFIG_OPTS + SMART_CONFIG_OPTS,
                 help='The quote character for string literals.'
             )
         ),
@@ -213,10 +219,21 @@ class StringQuoteChecker(BaseTokenChecker):
         # triple-quote strings
         if len(norm_quote) >= 3 and norm_quote[:3] in TRIPLE_QUOTE_OPTS.values():
             self._tokenized_triple_quotes[start_row] = (token, norm_quote[:3], start_row)
+            return
 
         # single quote strings
-        elif norm_quote[0] != SINGLE_QUOTE_OPTS.get(self.config.string_quote):
-            self._invalid_string_quote(norm_quote[0], start_row)
+
+        preferred_quote = SMART_QUOTE_OPTS.get(self.config.string_quote)
+
+        # Smart case.
+        if self.config.string_quote in SMART_CONFIG_OPTS:
+            other_quote = next(q for q in QUOTES if q != preferred_quote)
+            # If using the other quote avoids escaping, we switch to the other quote.
+            if preferred_quote in token[i+1:-1] and other_quote not in token[i+1:-1]:
+                preferred_quote = other_quote
+
+        if norm_quote[0] != preferred_quote:
+            self._invalid_string_quote(norm_quote[0], start_row, correct_quote=preferred_quote)
 
     def _check_triple_quotes(self, quote_record):
         """Check if the triple quote from tokenization is valid.
@@ -240,17 +257,21 @@ class StringQuoteChecker(BaseTokenChecker):
         if triple != TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote):
             self._invalid_docstring_quote(triple, row)
 
-    def _invalid_string_quote(self, quote, row):
+    def _invalid_string_quote(self, quote, row, correct_quote=None):
         """Add a message for an invalid string literal quote.
 
         Args:
             quote: The quote characters that were found.
             row: The row number the quote character was found on.
+            correct_quote: The quote characters that is required. If None
+                (default), will use the one from the config.
         """
+        if not correct_quote:
+            correct_quote = SMART_QUOTE_OPTS.get(self.config.string_quote)
         self.add_message(
             'invalid-string-quote',
             line=row,
-            args=(quote, SINGLE_QUOTE_OPTS.get(self.config.string_quote))
+            args=(quote, correct_quote)
         )
 
     def _invalid_triple_quote(self, quote, row):
