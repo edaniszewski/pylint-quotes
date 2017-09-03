@@ -1,6 +1,7 @@
 """Pylint plugin for checking quote type on strings.
 """
 
+from __future__ import print_function
 from __future__ import absolute_import
 
 import tokenize
@@ -146,12 +147,23 @@ class StringQuoteChecker(BaseTokenChecker):
             # to find the docstring, as it cannot appear after the first
             # element in the body.
             if node_type == 'module':
-                for i in range(0, node.body[0].lineno):
-                    quote_record = self._tokenized_triple_quotes.get(i)
+
+                # if there are no nodes that make up the body, then all we
+                # have is the module docstring
+                if len(node.body) == 0:
+                    # in this case, the docstring node is parsed at idx 1
+                    quote_record = self._tokenized_triple_quotes.get(1)
                     if quote_record:
                         self._check_docstring_quotes(quote_record)
-                        del self._tokenized_triple_quotes[i]
-                        break
+                        del self._tokenized_triple_quotes[1]
+
+                else:
+                    for i in range(0, node.body[0].lineno):
+                        quote_record = self._tokenized_triple_quotes.get(i)
+                        if quote_record:
+                            self._check_docstring_quotes(quote_record)
+                            del self._tokenized_triple_quotes[i]
+                            break
 
             else:
                 # the node has a docstring so we check the tokenized triple
