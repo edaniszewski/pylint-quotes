@@ -1,7 +1,6 @@
 """Pylint plugin for checking quote type on strings.
 """
 
-from __future__ import print_function
 from __future__ import absolute_import
 
 import tokenize
