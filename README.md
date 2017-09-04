@@ -108,8 +108,8 @@ between
 
 ## Configuration
 The string quote type can be configured as either 'single' or 'double' in the configuration
-file. For example, to check for single quote string literals, double quote triple quoted string,
-and double quoted docstrings,
+file. For example, to check for single quote string literals, double quote triple quoted 
+string, and double quoted docstrings,
 ```ini
 string-quote=single
 triple-quote=double

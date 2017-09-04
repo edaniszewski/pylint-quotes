@@ -156,11 +156,17 @@ class StringQuoteChecker(BaseTokenChecker):
                 # if there are no nodes that make up the body, then all we
                 # have is the module docstring
                 if len(node.body) == 0:
-                    # in this case, the docstring node is parsed at idx 1
-                    quote_record = self._tokenized_triple_quotes.get(1)
-                    if quote_record:
-                        self._check_docstring_quotes(quote_record)
-                        del self._tokenized_triple_quotes[1]
+                    # in this case, we should only have the module docstring
+                    # parsed in the node, so the only record in the
+                    # self._tokenized_triple_quotes dict will correspond to
+                    # the module comment. this can vary by index depending
+                    # on the presence of a shebang, encoding, etc at the top
+                    # of the file.
+                    for key in list(self._tokenized_triple_quotes.keys()):
+                        quote_record = self._tokenized_triple_quotes.get(key)
+                        if quote_record:
+                            self._check_docstring_quotes(quote_record)
+                            del self._tokenized_triple_quotes[key]
 
                 else:
                     for i in range(0, node.body[0].lineno):
@@ -174,11 +180,43 @@ class StringQuoteChecker(BaseTokenChecker):
                 # the node has a docstring so we check the tokenized triple
                 # quotes to find a matching docstring token that follows the
                 # function/class definition.
-                doc_row = self._find_docstring_line(node.fromlineno, node.tolineno)
-                quote_record = self._tokenized_triple_quotes.get(doc_row)
-                if quote_record:
-                    self._check_docstring_quotes(quote_record)
-                    del self._tokenized_triple_quotes[doc_row]
+
+                if len(node.body) == 0:
+                    # if there is no body to the class, the class def only contains
+                    # the docstring, so the only quotes we are tracking should
+                    # correspond to the class docstring.
+                    lineno = self._find_docstring_line_for_no_body(node.fromlineno)
+                    quote_record = self._tokenized_triple_quotes.get(lineno)
+                    if quote_record:
+                        self._check_docstring_quotes(quote_record)
+                        del self._tokenized_triple_quotes[lineno]
+
+                else:
+                    doc_row = self._find_docstring_line(node.fromlineno, node.tolineno)
+                    quote_record = self._tokenized_triple_quotes.get(doc_row)
+                    if quote_record:
+                        self._check_docstring_quotes(quote_record)
+                        del self._tokenized_triple_quotes[doc_row]
+
+    def _find_docstring_line_for_no_body(self, start):
+        """Find the docstring associated with a definition with no body
+        in the node.
+
+        In these cases, the provided start and end line number for that
+        element are the same, so we must get the docstring based on the
+        sequential position of known docstrings.
+
+        Args:
+            start: the row where the class / function starts.
+
+        Returns:
+            int: the row number where the docstring is found.
+        """
+        tracked = sorted(list(self._tokenized_triple_quotes.keys()))
+
+        for i in tracked:
+            if min(start, i) == start:
+                return i
 
     def _find_docstring_line(self, start, end):
         """Find the row where a docstring starts in a function or class.
@@ -279,6 +317,7 @@ class StringQuoteChecker(BaseTokenChecker):
         """
         if not correct_quote:
             correct_quote = SMART_QUOTE_OPTS.get(self.config.string_quote)
+
         self.add_message(
             'invalid-string-quote',
             line=row,
