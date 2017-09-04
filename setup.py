@@ -9,7 +9,6 @@ from pylint_quotes import __version__
 setup(
     name='pylint-quotes',
     description='Quote consistency checker for Pylint',
-    long_description=open('README.md').read(),
     license='MIT',
     version=__version__,
     author='Erick Daniszewski',
