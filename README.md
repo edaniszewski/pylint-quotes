@@ -1,4 +1,6 @@
 # Pylint Quote Checker
+![Build Status](https://travis-ci.org/edaniszewski/pylint-quotes.svg?branch=master)
+
 A Pylint plugin for checking the consistency of string quotes.
 
 ## Example
