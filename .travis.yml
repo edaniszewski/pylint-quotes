@@ -19,17 +19,17 @@ before_install:
   - uname -a
   - lsb_release -a
 install:
-  - pip install tox pylint
+  - pip install tox pylint coveralls
   - virtualenv --version
   - easy_install --version
   - pip --version
   - tox --version
 script:
-    # Test install with current version of setuptools
   - pip install .
-    # Run the tests with newest version of setuptools
   - pip install -U setuptools
   - tox $TOXENV
+after_success:
+  - coveralls
 after_failure:
   - more .tox/log/* | cat
   - more .tox/*/log/* | cat
