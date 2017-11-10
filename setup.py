@@ -2,6 +2,7 @@
 """
 
 from setuptools import setup, find_packages
+#import importlib
 
 from pylint_quotes import __version__
 
@@ -10,7 +11,7 @@ setup(
     name='pylint-quotes',
     description='Quote consistency checker for Pylint',
     license='MIT',
-    version=__version__,
+    version=__version__,#get_version(),
     author='Erick Daniszewski',
     author_email='edaniszewski@gmail.com',
     url='https://github.com/edaniszewski/pylint-quotes',
