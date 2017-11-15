@@ -10,11 +10,11 @@ def find_version(*file_paths):
     """Return version defined in __init__.py without import pylint"""
     with open(os.path.join(*file_paths)) as fhandler:
         version_file = fhandler.read()
-        version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+        version_match = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]',
                                   version_file, re.M)
     if version_match:
         return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
+    raise RuntimeError('Unable to find version string.')
 
 
 setup(
