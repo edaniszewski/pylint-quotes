@@ -1,7 +1,12 @@
 """Test utilities.
 """
 
-from pylint.testutils import tokenize_str, CheckerTestCase
+from pylint.testutils import CheckerTestCase
+
+try:
+    from pylint.testutils import tokenize_str
+except ImportError:
+    from pylint.testutils import _tokenize_str as tokenize_str
 
 import astroid
 
@@ -63,5 +68,14 @@ class StringQuiteCheckerTestCase(CheckerTestCase):
         self._check(
             test_str,
             self.checker.visit_functiondef,
+            *messages
+        )
+
+    def check_async_function(self, test_str, *messages):
+        """Test that the async function-level docstring is linted correctly
+        """
+        self._check(
+            test_str,
+            self.checker.visit_asyncfunctiondef,
             *messages
         )
