@@ -3,7 +3,6 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.7-dev"
 
 # install dependencies
 install:
@@ -12,7 +11,7 @@ install:
 
 # run tests
 script:
-  - pytest
+  - pytest --cov-report term --cov=pylint_quotes
 
 cache: pip
 
