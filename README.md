@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/edaniszewski/pylint-quotes.svg?branch=master)](https://travis-ci.org/edaniszewski/pylint-quotes)
 [![Coverage Status](https://coveralls.io/repos/github/edaniszewski/pylint-quotes/badge.svg?branch=master)](https://coveralls.io/github/edaniszewski/pylint-quotes?branch=master)
 [![Latest Version](https://img.shields.io/pypi/v/pylint-quotes.svg)](https://pypi.python.org/pypi/pylint-quotes)
+[![License](https://img.shields.io/github/license/edaniszewski/pylint-quotes.svg)](LICENSE)
 
 A Pylint plugin for checking the consistency of string quotes.
 

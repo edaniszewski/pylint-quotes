@@ -1,41 +1,44 @@
-"""Setup for the pylint-quotes package.
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Setup for the pylint-quotes package."""
 
 import os
-import re
 from setuptools import setup, find_packages
 
+here = os.path.abspath(os.path.dirname(__file__))
 
-def find_version(*file_paths):
-    """Return version defined in __init__.py without import pylint"""
-    with open(os.path.join(*file_paths)) as fhandler:
-        version_file = fhandler.read()
-        version_match = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]',
-                                  version_file, re.M)
-    if version_match:
-        return version_match.group(1)
-    raise RuntimeError('Unable to find version string.')
+about = {}
+with open(os.path.join(here, 'pylint_quotes', '__version__.py'), 'r') as f:
+    exec(f.read(), about)
 
 
 setup(
-    name='pylint-quotes',
-    description='Quote consistency checker for Pylint',
-    license='MIT',
-    version=find_version("pylint_quotes", "__init__.py"),
-    author='Erick Daniszewski',
-    author_email='edaniszewski@gmail.com',
-    url='https://github.com/edaniszewski/pylint-quotes',
+    name=about['__title__'],
+    description=about['__description__'],
+    license=about['__license__'],
+    version=about['__version__'],
+    author=about['__author__'],
+    author_email=about['__author_email__'],
+    url=about['__url__'],
     install_requires=[
-        'pylint',
+        'pylint>=1.7.6',
     ],
-    packages=find_packages(),
-    classifiers=[
+    python_requires=">=3.4",
+    packages=['pylint_quotes'],
+    zip_safe=False,
+    classifiers=(
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development',
         'Topic :: Utilities'
-    ],
-    keywords='pylint linting string quotes'
+    ),
+    keywords='pylint linting string quotes',
 )

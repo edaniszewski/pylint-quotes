@@ -1,35 +1,49 @@
 language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7-dev"
 
-matrix:
-  include:
-#    - python: 2.7
-#      env: TOXENV=py27
-#    - python: 2.7.6
-#      env: TOXENV=py27
-#    - python: 3.3
-#      env: TOXENV=py33
-    - python: 3.4
-      env: TOXENV=py34
-    - python: 3.5
-      env: TOXENV=py35
-    - python: 3.6
-      env: TOXENV=py36
-before_install:
-  - python --version
-  - uname -a
-  - lsb_release -a
+# install dependencies
 install:
-  - pip install tox pylint coveralls
-  - virtualenv --version
-  - easy_install --version
-  - pip --version
-  - tox --version
+  - pip install coveralls
+  - pip install -e .
+
+# run tests
 script:
-  - pip install .
-  - pip install -U setuptools
-  - tox $TOXENV
+  - pytest
+
+cache: pip
+
 after_success:
   - coveralls
-after_failure:
-  - more .tox/log/* | cat
-  - more .tox/*/log/* | cat
+
+#
+#matrix:
+#  include:
+#    - python: 3.4
+#      env: TOXENV=py34
+#    - python: 3.5
+#      env: TOXENV=py35
+#    - python: 3.6
+#      env: TOXENV=py36
+#before_install:
+#  - python --version
+#  - uname -a
+#  - lsb_release -a
+#install:
+#  - pip install tox pylint coveralls
+#  - virtualenv --version
+#  - easy_install --version
+#  - pip --version
+#  - tox --version
+#script:
+#  - pip install .
+#  - pip install -U setuptools
+#  - tox $TOXENV
+#after_success:
+#  - coveralls
+#after_failure:
+#  - more .tox/log/* | cat
+#  - more .tox/*/log/* | cat
