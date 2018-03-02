@@ -5,7 +5,12 @@ the need to string escape.
 """
 
 from pylint_quotes.checker import StringQuoteChecker
-from pylint.testutils import Message, set_config, tokenize_str
+from pylint.testutils import Message, set_config
+
+try:
+    from pylint.testutils import tokenize_str
+except ImportError:
+    from pylint.testutils import _tokenize_str as tokenize_str
 
 from utils import Q_DOUB, Q_SING, TRI_Q_SING, TRI_Q_DOUB, StringQuiteCheckerTestCase
 

@@ -137,6 +137,14 @@ class StringQuoteChecker(BaseTokenChecker):
         """
         self._process_for_docstring(node, 'function')
 
+    def visit_asyncfunctiondef(self, node):
+        """Visit an asynchronous function and check for docstring quote consistency.
+
+        Args:
+            node: the async function node being visited.
+        """
+        self._process_for_docstring(node, 'function')
+
     def _process_for_docstring(self, node, node_type):
         """Check for docstring quote consistency.
 
