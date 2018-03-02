@@ -6,7 +6,7 @@ python:
 
 # install dependencies
 install:
-  - pip install coveralls
+  - pip install coveralls pytest-cov
   - pip install -e .
 
 # run tests
