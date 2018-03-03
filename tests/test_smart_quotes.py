@@ -12,10 +12,10 @@ try:
 except ImportError:
     from pylint.testutils import _tokenize_str as tokenize_str
 
-from utils import Q_DOUB, Q_SING, TRI_Q_SING, TRI_Q_DOUB, StringQuiteCheckerTestCase
+from utils import Q_DOUB, Q_SING, TRI_Q_SING, TRI_Q_DOUB, StringQuoteCheckerTestCase
 
 
-class TestSmartStringQuoteChecker(StringQuiteCheckerTestCase):
+class TestSmartStringQuoteChecker(StringQuoteCheckerTestCase):
     """ Test case for smart escaping string literals.
     """
     CHECKER_CLASS = StringQuoteChecker

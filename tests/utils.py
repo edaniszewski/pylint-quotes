@@ -19,7 +19,7 @@ TRI_Q_SING = "'''"
 TRI_Q_DOUB = '"""'
 
 
-class StringQuiteCheckerTestCase(CheckerTestCase):
+class StringQuoteCheckerTestCase(CheckerTestCase):
     """A class which extends the pylint CheckerTestCase by wrapping
     some common code used in testing.
     """

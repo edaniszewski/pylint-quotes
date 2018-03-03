@@ -1,13 +1,11 @@
-"""Pylint plugin for checking quote type on strings.
-"""
+"""Pylint plugin for checking quote type on strings."""
 
 from __future__ import absolute_import
 
 import tokenize
 
-from pylint.interfaces import ITokenChecker, IAstroidChecker
 from pylint.checkers import BaseTokenChecker
-
+from pylint.interfaces import IAstroidChecker, ITokenChecker
 
 CONFIG_OPTS = ('single', 'double')
 SMART_CONFIG_OPTS = tuple('%s-avoid-escape' % c for c in CONFIG_OPTS)
@@ -163,7 +161,7 @@ class StringQuoteChecker(BaseTokenChecker):
 
                 # if there are no nodes that make up the body, then all we
                 # have is the module docstring
-                if len(node.body) == 0:
+                if not node.body:
                     # in this case, we should only have the module docstring
                     # parsed in the node, so the only record in the
                     # self._tokenized_triple_quotes dict will correspond to
@@ -189,10 +187,10 @@ class StringQuoteChecker(BaseTokenChecker):
                 # quotes to find a matching docstring token that follows the
                 # function/class definition.
 
-                if len(node.body) == 0:
-                    # if there is no body to the class, the class def only contains
-                    # the docstring, so the only quotes we are tracking should
-                    # correspond to the class docstring.
+                if not node.body:
+                    # if there is no body to the class, the class def only
+                    # contains the docstring, so the only quotes we are
+                    # tracking should correspond to the class docstring.
                     lineno = self._find_docstring_line_for_no_body(node.fromlineno)
                     quote_record = self._tokenized_triple_quotes.get(lineno)
                     if quote_record:
@@ -225,6 +223,7 @@ class StringQuoteChecker(BaseTokenChecker):
         for i in tracked:
             if min(start, i) == start:
                 return i
+        return None
 
     def _find_docstring_line(self, start, end):
         """Find the row where a docstring starts in a function or class.
@@ -242,6 +241,7 @@ class StringQuoteChecker(BaseTokenChecker):
         for i in range(start, end + 1):
             if i in self._tokenized_triple_quotes:
                 return i
+        return None
 
     def process_tokens(self, tokens):
         """Process the token stream.
@@ -286,11 +286,15 @@ class StringQuoteChecker(BaseTokenChecker):
         if self.config.string_quote in SMART_CONFIG_OPTS:
             other_quote = next(q for q in QUOTES if q != preferred_quote)
             # If using the other quote avoids escaping, we switch to the other quote.
-            if preferred_quote in token[i+1:-1] and other_quote not in token[i+1:-1]:
+            if preferred_quote in token[i + 1:-1] and other_quote not in token[i + 1:-1]:
                 preferred_quote = other_quote
 
         if norm_quote[0] != preferred_quote:
-            self._invalid_string_quote(norm_quote[0], start_row, correct_quote=preferred_quote)
+            self._invalid_string_quote(
+                quote=norm_quote[0],
+                row=start_row,
+                correct_quote=preferred_quote
+            )
 
     def _check_triple_quotes(self, quote_record):
         """Check if the triple quote from tokenization is valid.
