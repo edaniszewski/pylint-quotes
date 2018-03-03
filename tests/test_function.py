@@ -4,10 +4,10 @@
 from pylint_quotes.checker import StringQuoteChecker
 from pylint.testutils import Message, set_config
 
-from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuiteCheckerTestCase
+from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuoteCheckerTestCase
 
 
-class TestFunctionStringQuoteChecker(StringQuiteCheckerTestCase):
+class TestFunctionStringQuoteChecker(StringQuoteCheckerTestCase):
     """ Test case for function-level docstrings.
     """
     CHECKER_CLASS = StringQuoteChecker

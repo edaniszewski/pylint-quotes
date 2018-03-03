@@ -6,43 +6,17 @@ python:
 
 # install dependencies
 install:
-  - pip install coveralls pytest-cov
+  - pip install coveralls pytest-cov flake8 pylint isort
   - pip install -e .
-
-# run tests
-script:
-  - pytest --cov-report term --cov=pylint_quotes
 
 cache: pip
 
+# run tests and linting
+script:
+  - py.test --cov-report term --cov=pylint_quotes
+  - pylint pylint_quotes
+  - flake8 --ignore E501 pylint_quotes
+  - isort pylint_quotes -rc -c --diff
+
 after_success:
   - coveralls
-
-#
-#matrix:
-#  include:
-#    - python: 3.4
-#      env: TOXENV=py34
-#    - python: 3.5
-#      env: TOXENV=py35
-#    - python: 3.6
-#      env: TOXENV=py36
-#before_install:
-#  - python --version
-#  - uname -a
-#  - lsb_release -a
-#install:
-#  - pip install tox pylint coveralls
-#  - virtualenv --version
-#  - easy_install --version
-#  - pip --version
-#  - tox --version
-#script:
-#  - pip install .
-#  - pip install -U setuptools
-#  - tox $TOXENV
-#after_success:
-#  - coveralls
-#after_failure:
-#  - more .tox/log/* | cat
-#  - more .tox/*/log/* | cat

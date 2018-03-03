@@ -13,8 +13,7 @@ Below is an example python file that uses inconsistent string quotes.
 
 `example.py`
 ```python
-"""Example python file.
-"""
+"""Example python file."""
 
 
 def main(output="default"):
@@ -29,14 +28,16 @@ if __name__ == "__main__":
 ```
 which would yield
 ```
+➜ pylint --load-plugins pylint_quotes example.py 
+
 No config file found, using default configuration
 ************* Module example
-C:  5, 0: Invalid string quote ", should be ' (invalid-string-quote)
-C: 12, 0: Invalid string quote ", should be ' (invalid-string-quote)
-C:  6, 0: Invalid docstring quote ''', should be """ (invalid-docstring-quote)
+C:  4, 0: Invalid string quote ", should be ' (invalid-string-quote)
+C: 11, 0: Invalid string quote ", should be ' (invalid-string-quote)
+C:  5, 0: Invalid docstring quote ''', should be """ (invalid-docstring-quote)
 
-------------------------------------------------------------------
-Your code has been rated at 2.50/10 (previous run: 2.50/10, +0.00)
+-----------------------------------
+Your code has been rated at 2.50/10
 ```
 
 ### after
@@ -44,8 +45,7 @@ Fixing up the example above based on linting recommendations,
 
 `example.py`
 ```python
-"""Example python file.
-"""
+"""Example python file."""
 
 
 def main(output='default'):
@@ -60,6 +60,8 @@ if __name__ == '__main__':
 ```
 which yields
 ```
+➜ pylint --load-plugins pylint_quotes example.py 
+
 No config file found, using default configuration
 
 -------------------------------------------------------------------
@@ -68,8 +70,14 @@ Your code has been rated at 10.00/10 (previous run: 2.50/10, +7.50)
 
 ## Installation
 
+Installing with `pip`:
 ```
 pip install pylint-quotes
+```
+
+Installing with `pipenev`:
+```
+pipenv install pylint-quotes
 ```
 
 ## Usage
@@ -98,7 +106,7 @@ between
    example
    """
    ```
- - docstrings (module, class, function)
+ - docstrings (module, class, function, async function)
    ```python
    def x():
        '''Example'''
@@ -107,6 +115,11 @@ between
    def y():
        """
            Multi-line example.
+       """
+       pass
+  
+   async def z():
+       """Async example.
        """
        pass
    ```
@@ -132,3 +145,20 @@ Additionally the `string-quote` can be configured to avoid escaping: by default
 it enforces one type but if using the other type would avoid some escaping then
 it enforces the other one. To use those smart types the config is
 'single-avoid-escape', and 'double-avoid-escape'.
+
+
+## Developing
+If you wish to develop the pylint-quotes project to fix a bug, add a feature, or
+extend it for your own uses, the [Makefile](Makefile) provides a bunch of helpful
+development targets. For a full list of the targets, see the Makefile, or you can
+use `make help`.
+
+For convenience, `pipenv` is used to manage development dependencies. Before starting
+development, you should `make init` to install `pipenv` if you don't already have it and
+create a virtualenv with the project development dependencies. From there, you can use:
+- `make test` to run the unit tests
+- `make coverage` to run unit tests and get a coverage report
+- `make lint` to perform source code linting
+
+## License
+Pylint-quotes is licensed under an MIT license -- see [LICENSE](LICENSE) for more info.

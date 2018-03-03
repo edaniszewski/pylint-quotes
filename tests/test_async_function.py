@@ -7,11 +7,11 @@ import pytest
 from pylint_quotes.checker import StringQuoteChecker
 from pylint.testutils import Message, set_config
 
-from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuiteCheckerTestCase
+from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuoteCheckerTestCase
 
 
 @pytest.mark.skipif(sys.version_info < (3, 5), reason='requires python3.5 or python3.6')
-class TestAsyncFunctionStringQuoteChecker(StringQuiteCheckerTestCase):
+class TestAsyncFunctionStringQuoteChecker(StringQuoteCheckerTestCase):
     """ Test case for asynchronous function-level docstrings.
     """
     CHECKER_CLASS = StringQuoteChecker
