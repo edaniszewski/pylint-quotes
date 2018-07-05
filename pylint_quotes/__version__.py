@@ -5,7 +5,7 @@
 __title__ = 'pylint-quotes'
 __description__ = 'Quote consistency checker for PyLint..'
 __url__ = 'https://github.com/edaniszewski/pylint-quotes'
-__version__ = '0.1.9'
+__version__ = '0.1.10'
 __author__ = 'Erick Daniszewski'
 __author_email__ = 'edaniszewski@gmail.com'
 __license__ = 'MIT'
