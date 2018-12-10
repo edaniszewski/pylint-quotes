@@ -2,34 +2,24 @@
 # Pylint Quotes
 #
 
-PKG_VER := $(shell cat pylint_quotes/__version__.py | grep __version__ | awk '{print $$3}' | tr -d "'")
+PKG_VER := $(shell python setup.py --version)
 
 
-.PHONY: init
-init: ## Initialize the repo for development
-	pip install pipenv
-	pipenv install --dev --skip-lock
-
-.PHONY: coverage
-coverage: ## Run tests and report on coverage
-	pipenv run py.test --cov-report term --cov=pylint_quotes tests
+.PHONY: deps
+deps: ## Update the frozen pip dependencies (requirements.txt)
+	tox -e deps
 
 .PHONY: lint
 lint: ## Lint the source code (pylint, flake8, isort)
-	pipenv run pylint pylint_quotes
-	pipenv run flake8 --ignore E501 pylint_quotes
-	pipenv run isort pylint_quotes -rc -c --diff
+	tox -e lint
 
 .PHONY: publish
 publish: ## Publish to PyPi
-	pip install 'twine>=1.5.0'
-	python setup.py sdist bdist_wheel
-	twine upload dist/*
-	rm -rf build dist .egg pylint_quotes.egg-info
+	tox -e publish
 
 .PHONY: test
 test: ## Run unit tests
-	pipenv run py.test
+	tox
 
 .PHONY: version
 version: ## Print the version of Synse Server
