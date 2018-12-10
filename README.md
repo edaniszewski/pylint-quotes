@@ -68,6 +68,30 @@ No config file found, using default configuration
 Your code has been rated at 10.00/10 (previous run: 2.50/10, +7.50)
 ```
 
+### Example Package
+An example package is found in the [`example/`](example) directory.
+
+```
+➜ pylint --load-plugins pylint_quotes example
+
+************* Module foo.__init__
+example/foo/__init__.py:3:0: C4001: Invalid string quote ", should be ' (invalid-string-quote)
+************* Module foo
+example/foo/__init__.py:1:0: C0102: Black listed name "foo" (blacklisted-name)
+************* Module foo.other
+example/foo/other.py:1:0: C4003: Invalid docstring quote ''', should be """ (invalid-docstring-quote)
+example/foo/other.py:4:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+example/foo/other.py:10:0: C4002: Invalid triple quote """, should be ''' (invalid-triple-quote)
+************* Module foo.utils
+example/foo/utils.py:15:0: C4001: Invalid string quote ", should be ' (invalid-string-quote)
+example/foo/utils.py:5:0: C4003: Invalid docstring quote ''', should be """ (invalid-docstring-quote)
+example/foo/utils.py:10:0: C4003: Invalid docstring quote ''', should be """ (invalid-docstring-quote)
+
+------------------------------------------------------------------
+Your code has been rated at 1.11/10 (previous run: 1.11/10, +0.00)
+```
+
+
 ## Installation
 
 Installing with `pip`:
