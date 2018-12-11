@@ -251,19 +251,20 @@ class StringQuoteChecker(BaseTokenChecker):
         Args:
             tokens: the tokens from the token stream to process.
         """
-        for tok_type, token, (start_row, _), _, _ in tokens:
+        for tok_type, token, (start_row, start_col), _, _ in tokens:
             if tok_type == tokenize.STRING:
                 # 'token' is the whole un-parsed token; we can look at the start
                 # of it to see whether it's a raw or unicode string etc.
-                self._process_string_token(token, start_row)
+                self._process_string_token(token, start_row, start_col)
 
-    def _process_string_token(self, token, start_row):
+    def _process_string_token(self, token, start_row, start_col):
         """Internal method for identifying and checking string tokens
         from the token stream.
 
         Args:
             token: the token to check.
             start_row: the line on which the token was found.
+            start_col: the column on which the token was found.
         """
         for i, char in enumerate(token):
             if char in QUOTES:
@@ -275,7 +276,7 @@ class StringQuoteChecker(BaseTokenChecker):
 
         # triple-quote strings
         if len(norm_quote) >= 3 and norm_quote[:3] in TRIPLE_QUOTE_OPTS.values():
-            self._tokenized_triple_quotes[start_row] = (token, norm_quote[:3], start_row)
+            self._tokenized_triple_quotes[start_row] = (token, norm_quote[:3], start_row, start_col)
             return
 
         # single quote strings
@@ -293,7 +294,8 @@ class StringQuoteChecker(BaseTokenChecker):
             self._invalid_string_quote(
                 quote=norm_quote[0],
                 row=start_row,
-                correct_quote=preferred_quote
+                correct_quote=preferred_quote,
+                col=start_col,
             )
 
     def _check_triple_quotes(self, quote_record):
@@ -301,11 +303,11 @@ class StringQuoteChecker(BaseTokenChecker):
 
         Args:
             quote_record: a tuple containing the info about the string
-                from tokenization, giving the (token, quote, row number).
+                from tokenization, giving the (token, quote, row number, column).
         """
-        _, triple, row = quote_record
+        _, triple, row, col = quote_record
         if triple != TRIPLE_QUOTE_OPTS.get(self.config.triple_quote):
-            self._invalid_triple_quote(triple, row)
+            self._invalid_triple_quote(triple, row, col)
 
     def _check_docstring_quotes(self, quote_record):
         """Check if the docstring quote from tokenization is valid.
@@ -314,11 +316,11 @@ class StringQuoteChecker(BaseTokenChecker):
             quote_record: a tuple containing the info about the string
                 from tokenization, giving the (token, quote, row number).
         """
-        _, triple, row = quote_record
+        _, triple, row, col = quote_record
         if triple != TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote):
-            self._invalid_docstring_quote(triple, row)
+            self._invalid_docstring_quote(triple, row, col)
 
-    def _invalid_string_quote(self, quote, row, correct_quote=None):
+    def _invalid_string_quote(self, quote, row, correct_quote=None, col=None):
         """Add a message for an invalid string literal quote.
 
         Args:
@@ -326,6 +328,7 @@ class StringQuoteChecker(BaseTokenChecker):
             row: The row number the quote character was found on.
             correct_quote: The quote characters that is required. If None
                 (default), will use the one from the config.
+            col: The column the quote characters were found on.
         """
         if not correct_quote:
             correct_quote = SMART_QUOTE_OPTS.get(self.config.string_quote)
@@ -333,31 +336,36 @@ class StringQuoteChecker(BaseTokenChecker):
         self.add_message(
             'invalid-string-quote',
             line=row,
-            args=(quote, correct_quote)
+            args=(quote, correct_quote),
+            col_offset=col,
         )
 
-    def _invalid_triple_quote(self, quote, row):
+    def _invalid_triple_quote(self, quote, row, col=None):
         """Add a message for an invalid triple quote.
 
         Args:
             quote: The quote characters that were found.
             row: The row number the quote characters were found on.
+            col: The column the quote characters were found on.
         """
         self.add_message(
             'invalid-triple-quote',
             line=row,
-            args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.triple_quote))
+            args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.triple_quote)),
+            col_offset=col,
         )
 
-    def _invalid_docstring_quote(self, quote, row):
+    def _invalid_docstring_quote(self, quote, row, col=None):
         """Add a message for an invalid docstring quote.
 
         Args:
             quote: The quote characters that were found.
             row: The row number the quote characters were found on.
+            col: The column the quote characters were found on.
         """
         self.add_message(
             'invalid-docstring-quote',
             line=row,
-            args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote))
+            args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote)),
+            col_offset=col,
         )
