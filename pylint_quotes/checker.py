@@ -341,7 +341,22 @@ class StringQuoteChecker(BaseTokenChecker):
             **self.get_offset(col)
         )
 
-    def get_offset(self, col):
+    @staticmethod
+    def get_offset(col):
+        """Return kwargs to pass to add_message.
+
+        col_offset is not present in all versions of pylint, so
+        attempt to determine if col_offset is supported, if so
+        return a dictionary returning col_offset otherwise return
+        {}.
+
+        Args:
+            col: The integer column offset to possibly include in
+                the kwargs.
+
+        Returns:
+            dict: Keyword arguments to pass to add_message
+        """
         if (2, 2, 2) < pylint_version:
             return {'col_offset': col}
         return {}
