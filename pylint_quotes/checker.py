@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 import tokenize
 
-from pylint.__pkginfo__ import numversion as pylint_version
 from pylint.checkers import BaseTokenChecker
 from pylint.interfaces import IAstroidChecker, ITokenChecker
 
@@ -344,11 +343,6 @@ class StringQuoteChecker(BaseTokenChecker):
     @staticmethod
     def get_offset(col):
         """Return kwargs to pass to add_message.
-
-        col_offset is not present in all versions of pylint, so
-        attempt to determine if col_offset is supported, if so
-        return a dictionary returning col_offset otherwise return
-        {}.
 
         Args:
             col: The integer column offset to possibly include in
