@@ -357,9 +357,7 @@ class StringQuoteChecker(BaseTokenChecker):
         Returns:
             dict: Keyword arguments to pass to add_message
         """
-        if (2, 2, 2) < pylint_version:
-            return {'col_offset': col}
-        return {}
+        return {'col_offset': col}
 
     def _invalid_triple_quote(self, quote, row, col=None):
         """Add a message for an invalid triple quote.
