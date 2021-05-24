@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 import tokenize
 
+from pylint.__pkginfo__ import numversion as pylint_version
 from pylint.checkers import BaseTokenChecker
 from pylint.interfaces import IAstroidChecker, ITokenChecker
 
@@ -344,6 +345,11 @@ class StringQuoteChecker(BaseTokenChecker):
     def get_offset(col):
         """Return kwargs to pass to add_message.
 
+        col_offset is not present in all versions of pylint, so
+        attempt to determine if col_offset is supported, if so
+        return a dictionary returning col_offset otherwise return
+        {}.
+
         Args:
             col: The integer column offset to possibly include in
                 the kwargs.
@@ -351,7 +357,9 @@ class StringQuoteChecker(BaseTokenChecker):
         Returns:
             dict: Keyword arguments to pass to add_message
         """
-        return {'col_offset': col}
+        if ('2', '2', '2') < tuple(map(str, pylint_version)):
+            return {'col_offset': col}
+        return {}
 
     def _invalid_triple_quote(self, quote, row, col=None):
         """Add a message for an invalid triple quote.
