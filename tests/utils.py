@@ -3,10 +3,7 @@
 
 from pylint.testutils import CheckerTestCase
 
-try:
-    from pylint.testutils import tokenize_str
-except ImportError:
-    from pylint.testutils import _tokenize_str as tokenize_str
+from pylint.testutils import _tokenize_str as tokenize_str
 
 import astroid
 

@@ -3,7 +3,7 @@
 """Setup for the pylint-quotes package."""
 
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,9 +21,9 @@ setup(
     author_email=about['__author_email__'],
     url=about['__url__'],
     install_requires=[
-        'pylint>=1.7.6',
+        'pylint>=2.8.0',
     ],
-    python_requires=">=3.4",
+    python_requires=">=3.6",
     packages=['pylint_quotes'],
     zip_safe=False,
     classifiers=(
@@ -32,12 +32,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Software Development',
         'Topic :: Utilities'
     ),
