@@ -357,7 +357,7 @@ class StringQuoteChecker(BaseTokenChecker):
         Returns:
             dict: Keyword arguments to pass to add_message
         """
-        if (2, 2, 2) < pylint_version:
+        if ('2', '2', '2') < tuple(map(str, pylint_version)):
             return {'col_offset': col}
         return {}
 
