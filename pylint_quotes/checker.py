@@ -4,9 +4,16 @@ from __future__ import absolute_import
 
 import tokenize
 
-from pylint.__pkginfo__ import numversion as pylint_version
 from pylint.checkers import BaseTokenChecker
 from pylint.interfaces import IAstroidChecker, ITokenChecker
+
+try:
+    from pylint import version as pv
+except ImportError:
+    # Backwards compatibility (pylint<2.8.0)
+    from pylint.__pkginfo__ import version as pv
+
+pylint_version = tuple(pv.split("."))
 
 CONFIG_OPTS = ('single', 'double')
 SMART_CONFIG_OPTS = tuple('%s-avoid-escape' % c for c in CONFIG_OPTS)
@@ -357,7 +364,7 @@ class StringQuoteChecker(BaseTokenChecker):
         Returns:
             dict: Keyword arguments to pass to add_message
         """
-        if ('2', '2', '2') < tuple(map(str, pylint_version)):
+        if ('2', '2', '2') < pylint_version:
             return {'col_offset': col}
         return {}
 
