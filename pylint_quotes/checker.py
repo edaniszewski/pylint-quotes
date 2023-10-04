@@ -5,7 +5,6 @@ from __future__ import absolute_import
 import tokenize
 
 from pylint.checkers import BaseTokenChecker
-from pylint.interfaces import IAstroidChecker, ITokenChecker
 
 try:
     from pylint import version as pv
@@ -37,8 +36,6 @@ class StringQuoteChecker(BaseTokenChecker):
     enforcing single quotes (') most of the time, except if the string itself
     contains a single quote, then enforce double quotes (").
     """
-
-    __implements__ = (ITokenChecker, IAstroidChecker, )
 
     name = 'string_quotes'
 
