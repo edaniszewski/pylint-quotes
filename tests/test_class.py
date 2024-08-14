@@ -2,7 +2,7 @@
 """
 
 from pylint_quotes.checker import StringQuoteChecker
-from pylint.testutils import Message, set_config
+from pylint.testutils import MessageTest, set_config
 
 from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuoteCheckerTestCase
 
@@ -29,7 +29,7 @@ class TestClass(object):  #@
 class TestClass(object):  #@
     """Class level docstring on a single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -40,7 +40,7 @@ class TestClass(object):  #@
 class TestClass(object):  #@
     '''Class level docstring on a single line.'''
 """
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
 
         self.check_class(test_str, msg)
 
@@ -75,7 +75,7 @@ class TestClass(  #@
 ):
     """Class level docstring on a single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -108,7 +108,7 @@ class TestClass2(object):  #@
 class TestClass3(object):
     """Another class level docstring on single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=6, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=6, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -133,7 +133,7 @@ class TestClass(object):  #@
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -146,7 +146,7 @@ class TestClass(object):  #@
     on multiple lines.
     '''
 """
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
 
         self.check_class(test_str, msg)
 
@@ -187,7 +187,7 @@ class TestClass(  #@
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -232,7 +232,7 @@ class TestClass3(object):
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=8, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=8, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -263,7 +263,7 @@ class TestClass(object):  #@
     def __init__(self):
         pass
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)
 
@@ -308,6 +308,6 @@ class TestClass(object):  #@
         """Gets the x member"""
         return self.x
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_class(test_str, msg)

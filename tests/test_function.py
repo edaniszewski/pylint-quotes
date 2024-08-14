@@ -2,7 +2,7 @@
 """
 
 from pylint_quotes.checker import StringQuoteChecker
-from pylint.testutils import Message, set_config
+from pylint.testutils import MessageTest, set_config
 
 from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuoteCheckerTestCase
 
@@ -29,7 +29,7 @@ def fn(x):  #@
 def fn(x):  #@
     """Function level docstring on a single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -40,7 +40,7 @@ def fn(x):  #@
 def fn(x):  #@
     '''Function level docstring on a single line.'''
 """
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
 
         self.check_function(test_str, msg)
 
@@ -75,7 +75,7 @@ def fn(  #@
 ):
     """Function level docstring on a single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -108,7 +108,7 @@ def fn2(x):  #@
 def fn3(x):
     """Another function level docstring on single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=6, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=6, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -133,7 +133,7 @@ def fn(x):  #@
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -146,7 +146,7 @@ def fn(x):  #@
     on multiple lines.
     '''
 """
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
 
         self.check_function(test_str, msg)
 
@@ -187,7 +187,7 @@ def fn(  #@
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -232,7 +232,7 @@ def fn3(x):
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=8, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=8, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -255,7 +255,7 @@ def fn(x):  #@
     """Function level docstring on a single line."""
     return 33
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -286,7 +286,7 @@ def fn(x):  #@
 
     return values.get(x)
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)
 
@@ -321,6 +321,6 @@ def fn(x):  #@
 
     return local_fn(x)
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_function(test_str, msg)

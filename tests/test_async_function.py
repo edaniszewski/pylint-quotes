@@ -5,7 +5,7 @@ import sys
 import pytest
 
 from pylint_quotes.checker import StringQuoteChecker
-from pylint.testutils import Message, set_config
+from pylint.testutils import MessageTest, set_config
 
 from utils import TRI_Q_DOUB, TRI_Q_SING, StringQuoteCheckerTestCase
 
@@ -35,7 +35,7 @@ async def fn(x):  #@
     """Function level docstring on a single line."""
     pass
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
         self.check_async_function(test_str, msg)
 
     @set_config(docstring_quote='double')
@@ -46,7 +46,7 @@ async def fn(x):  #@
     '''Function level docstring on a single line.'''
     pass
 """
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
 
         self.check_async_function(test_str, msg)
 
@@ -74,7 +74,7 @@ async def fn(  #@
         self.check_async_function(test_str)
 
     @set_config(docstring_quote='single')
-    def test_single_line_double_quote_docstring_with_cfg_single_multi_row_def(self):
+    def MessageTest_multi_row_def(self):
 
         test_str = '''
 async def fn(  #@
@@ -82,7 +82,7 @@ async def fn(  #@
 ):
     """Function level docstring on a single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -115,7 +115,7 @@ async def fn2(x):  #@
 async def fn3(x):
     """Another function level docstring on single line."""
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=6, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=6, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -140,7 +140,7 @@ async def fn(x):  #@
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -153,7 +153,7 @@ async def fn(x):  #@
     on multiple lines.
     '''
 """
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_SING, TRI_Q_DOUB))
 
         self.check_async_function(test_str, msg)
 
@@ -194,7 +194,7 @@ async def fn(  #@
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=5, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -239,7 +239,7 @@ async def fn3(x):
     on multiple lines.
     """
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=8, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=8, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -262,7 +262,7 @@ async def fn(x):  #@
     """Function level docstring on a single line."""
     return 33
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -293,7 +293,7 @@ async def fn(x):  #@
 
     return values.get(x)
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)
 
@@ -328,6 +328,6 @@ async def fn(x):  #@
 
     return local_fn(x)
 '''
-        msg = Message(msg_id='invalid-docstring-quote', line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
+        msg = MessageTest(msg_id='invalid-docstring-quote', col_offset=4, line=3, args=(TRI_Q_DOUB, TRI_Q_SING))
 
         self.check_async_function(test_str, msg)

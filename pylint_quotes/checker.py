@@ -5,7 +5,6 @@ from __future__ import absolute_import
 import tokenize
 
 from pylint.checkers import BaseTokenChecker
-from pylint.interfaces import IAstroidChecker, ITokenChecker
 
 try:
     from pylint import version as pv
@@ -16,7 +15,7 @@ except ImportError:
 pylint_version = tuple(pv.split("."))
 
 CONFIG_OPTS = ('single', 'double')
-SMART_CONFIG_OPTS = tuple('%s-avoid-escape' % c for c in CONFIG_OPTS)
+SMART_CONFIG_OPTS = tuple(f'{c}-avoid-escape' for c in CONFIG_OPTS)
 
 QUOTES = ('\'', '"')
 
@@ -37,8 +36,6 @@ class StringQuoteChecker(BaseTokenChecker):
     enforcing single quotes (') most of the time, except if the string itself
     contains a single quote, then enforce double quotes (").
     """
-
-    __implements__ = (ITokenChecker, IAstroidChecker, )
 
     name = 'string_quotes'
 
@@ -66,33 +63,34 @@ class StringQuoteChecker(BaseTokenChecker):
     options = (
         (
             'string-quote',
-            dict(
-                type='choice',
-                metavar='<{0}, {1}, {2} or {3}>'.format(*CONFIG_OPTS + SMART_CONFIG_OPTS),
-                default=CONFIG_OPTS[0],
-                choices=CONFIG_OPTS + SMART_CONFIG_OPTS,
-                help='The quote character for string literals.'
-            )
+            {
+                'type': 'choice',
+                'metavar': f'<{CONFIG_OPTS[0]}, {CONFIG_OPTS[1]}, '
+                           f'{SMART_CONFIG_OPTS[0]} or {SMART_CONFIG_OPTS[1]}>',
+                'default': CONFIG_OPTS[0],
+                'choices': CONFIG_OPTS + SMART_CONFIG_OPTS,
+                'help': 'The quote character for string literals.'
+            }
         ),
         (
             'triple-quote',
-            dict(
-                type='choice',
-                metavar='<{0} or {1}>'.format(*CONFIG_OPTS),
-                default=CONFIG_OPTS[0],
-                choices=CONFIG_OPTS,
-                help='The quote character for triple-quoted strings (non-docstring).'
-            )
+            {
+                'type': 'choice',
+                'metavar': f'<{CONFIG_OPTS[0]} or {CONFIG_OPTS[1]}>',
+                'default': CONFIG_OPTS[0],
+                'choices': CONFIG_OPTS,
+                'help': 'The quote character for triple-quoted strings (non-docstring).'
+            }
         ),
         (
             'docstring-quote',
-            dict(
-                type='choice',
-                metavar='<{0} or {1}>'.format(*CONFIG_OPTS),
-                default=CONFIG_OPTS[1],
-                choices=CONFIG_OPTS,
-                help='The quote character for triple-quoted docstrings.'
-            )
+            {
+                'type': 'choice',
+                'metavar': f'<{CONFIG_OPTS[0]} or {CONFIG_OPTS[1]}>',
+                'default': CONFIG_OPTS[1],
+                'choices': CONFIG_OPTS,
+                'help': 'The quote character for triple-quoted docstrings.'
+            }
         )
     )
 
@@ -159,7 +157,7 @@ class StringQuoteChecker(BaseTokenChecker):
             node_type: the type of node being operated on.
         """
         # if there is no docstring, don't need to do anything.
-        if node.doc is not None:
+        if node.doc_node is not None:
 
             # the module is everything, so to find the docstring, we
             # iterate line by line from the start until the first element
@@ -289,10 +287,10 @@ class StringQuoteChecker(BaseTokenChecker):
 
         # single quote strings
 
-        preferred_quote = SMART_QUOTE_OPTS.get(self.config.string_quote)
+        preferred_quote = SMART_QUOTE_OPTS.get(self.linter.config.string_quote)
 
         # Smart case.
-        if self.config.string_quote in SMART_CONFIG_OPTS:
+        if self.linter.config.string_quote in SMART_CONFIG_OPTS:
             other_quote = next(q for q in QUOTES if q != preferred_quote)
             # If using the other quote avoids escaping, we switch to the other quote.
             if preferred_quote in token[i + 1:-1] and other_quote not in token[i + 1:-1]:
@@ -314,7 +312,7 @@ class StringQuoteChecker(BaseTokenChecker):
                 from tokenization, giving the (token, quote, row number, column).
         """
         _, triple, row, col = quote_record
-        if triple != TRIPLE_QUOTE_OPTS.get(self.config.triple_quote):
+        if triple != TRIPLE_QUOTE_OPTS.get(self.linter.config.triple_quote):
             self._invalid_triple_quote(triple, row, col)
 
     def _check_docstring_quotes(self, quote_record):
@@ -325,7 +323,7 @@ class StringQuoteChecker(BaseTokenChecker):
                 from tokenization, giving the (token, quote, row number).
         """
         _, triple, row, col = quote_record
-        if triple != TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote):
+        if triple != TRIPLE_QUOTE_OPTS.get(self.linter.config.docstring_quote):
             self._invalid_docstring_quote(triple, row, col)
 
     def _invalid_string_quote(self, quote, row, correct_quote=None, col=None):
@@ -339,7 +337,7 @@ class StringQuoteChecker(BaseTokenChecker):
             col: The column the quote characters were found on.
         """
         if not correct_quote:
-            correct_quote = SMART_QUOTE_OPTS.get(self.config.string_quote)
+            correct_quote = SMART_QUOTE_OPTS.get(self.linter.config.string_quote)
 
         self.add_message(
             'invalid-string-quote',
@@ -379,7 +377,7 @@ class StringQuoteChecker(BaseTokenChecker):
         self.add_message(
             'invalid-triple-quote',
             line=row,
-            args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.triple_quote)),
+            args=(quote, TRIPLE_QUOTE_OPTS.get(self.linter.config.triple_quote)),
             **self.get_offset(col)
         )
 
@@ -394,6 +392,6 @@ class StringQuoteChecker(BaseTokenChecker):
         self.add_message(
             'invalid-docstring-quote',
             line=row,
-            args=(quote, TRIPLE_QUOTE_OPTS.get(self.config.docstring_quote)),
+            args=(quote, TRIPLE_QUOTE_OPTS.get(self.linter.config.docstring_quote)),
             **self.get_offset(col)
         )
