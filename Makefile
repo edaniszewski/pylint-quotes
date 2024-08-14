@@ -2,7 +2,7 @@
 # Pylint Quotes
 #
 
-PKG_VER := $(shell python setup.py --version)
+PKG_VER := $(shell python3 setup.py --version)
 
 
 .PHONY: deps

@@ -21,12 +21,12 @@ setup(
     author_email=about['__author_email__'],
     url=about['__url__'],
     install_requires=[
-        'pylint>=2.8.0',
+        'pylint>=3.2.0',
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.10",
     packages=['pylint_quotes'],
     zip_safe=False,
-    classifiers=(
+    classifiers=[
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: MIT License',
@@ -38,6 +38,6 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Topic :: Software Development',
         'Topic :: Utilities'
-    ),
+    ],
     keywords='pylint linting string quotes',
 )

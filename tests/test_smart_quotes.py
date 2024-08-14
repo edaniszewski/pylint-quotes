@@ -5,7 +5,7 @@ the need to string escape.
 """
 
 from pylint_quotes.checker import StringQuoteChecker
-from pylint.testutils import Message, set_config
+from pylint.testutils import MessageTest, set_config
 
 from pylint.testutils import _tokenize_str as tokenize_str
 
@@ -22,7 +22,7 @@ class TestSmartStringQuoteChecker(StringQuoteCheckerTestCase):
 
         test_str = '''x = "this is a \\"test\\" string"'''
 
-        msg = Message(msg_id='invalid-string-quote', line=1, args=(Q_DOUB, Q_SING))
+        msg = MessageTest(msg_id='invalid-string-quote', col_offset=4, line=1, args=(Q_DOUB, Q_SING))
         with self.assertAddsMessages(msg):
             self.checker.process_tokens(tokenize_str(test_str))
 
@@ -31,7 +31,7 @@ class TestSmartStringQuoteChecker(StringQuoteCheckerTestCase):
 
         test_str = '''x = "this is a \\"test\\" string"'''
 
-        msg = Message(msg_id='invalid-string-quote', line=1, args=(Q_DOUB, Q_SING))
+        msg = MessageTest(msg_id='invalid-string-quote', col_offset=4, line=1, args=(Q_DOUB, Q_SING))
         with self.assertAddsMessages(msg):
             self.checker.process_tokens(tokenize_str(test_str))
 
@@ -40,7 +40,7 @@ class TestSmartStringQuoteChecker(StringQuoteCheckerTestCase):
 
         test_str = """x = 'this is a \\'test\\' string'"""
 
-        msg = Message(msg_id='invalid-string-quote', line=1, args=(Q_SING, Q_DOUB))
+        msg = MessageTest(msg_id='invalid-string-quote', col_offset=4, line=1, args=(Q_SING, Q_DOUB))
         with self.assertAddsMessages(msg):
             self.checker.process_tokens(tokenize_str(test_str))
 
@@ -49,7 +49,7 @@ class TestSmartStringQuoteChecker(StringQuoteCheckerTestCase):
 
         test_str = """x = 'this is a \\'test\\' string'"""
 
-        msg = Message(msg_id='invalid-string-quote', line=1, args=(Q_SING, Q_DOUB))
+        msg = MessageTest(msg_id='invalid-string-quote', col_offset=4, line=1, args=(Q_SING, Q_DOUB))
         with self.assertAddsMessages(msg):
             self.checker.process_tokens(tokenize_str(test_str))
 
